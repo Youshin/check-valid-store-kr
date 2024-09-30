@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import sys
 
 
 def check_if_valid_store(query_store, query_address=""):
@@ -44,11 +45,15 @@ def check_if_valid_store(query_store, query_address=""):
 
 
 if __name__ == "__main__":
-
     load_dotenv()
-    flag = check_if_valid_store(
-        "투썸플레이스 문정역점"  # , "서울 송파구 법원로 114 엠스테이트 B동 1층"
-    )
+    if len(sys.argv) < 2:
+        print("사용법: python valid_store_naver.py <가게이름> [주소]")
+        sys.exit(1)
+
+    store_name = sys.argv[1]
+    store_address = sys.argv[2] if len(sys.argv) > 2 else ""
+
+    flag = check_if_valid_store(store_name, store_address)
     if flag:
         print("유효한 가게")
     else:
