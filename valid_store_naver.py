@@ -56,5 +56,7 @@ if __name__ == "__main__":
     flag = check_if_valid_store(store_name, store_address)
     if flag:
         print("유효한 가게")
+        sys.exit(0)
     else:
         print("유효하지 않은 가게")
+        sys.exit(1)
