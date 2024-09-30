@@ -4,6 +4,28 @@ import os
 import sys
 
 
+def check_address(query_address, store_address):
+    addresses = query_address.split(" ")
+
+    for address in addresses:
+        if address in store_address:
+            continue
+        else:
+            return False
+    return True
+
+
+def check_road_address(query_address, store_address):
+    addresses = query_address.split(" ")
+
+    for road_address in addresses:
+        if road_address in store_address:
+            continue
+        else:
+            return False
+    return True
+
+
 def check_if_valid_store(query_store, query_address=""):
     # 네이버 API 키 설정
     client_id = os.getenv("NAVER_CLIENT_ID")
@@ -18,29 +40,34 @@ def check_if_valid_store(query_store, query_address=""):
 
     # GET 요청
     response = requests.get(url, headers=headers)
-
     # 결과 출력
     if response.status_code == 200:
         if not response.json()["items"]:
             print(
-                f"검색 결과가 없습니다: \n\t가게명 {query_store} \n\t주소 {query_address}"
+                f"검색 결과가 없습니다: \n\t가게명: {query_store} \n\t주소: {query_address}"
             )
             return False
         for item in response.json()["items"]:
             store_name = item["title"].replace("<b>", "").replace("</b>", "")
             store_address = item["address"].strip()
             road_address = item["roadAddress"].strip()
-            if query_store == store_name and (
-                query_address in store_address or query_address in road_address
-            ):
-                print(
-                    f"가게 이름: {store_name}, 주소: {store_address} 도로명 주소: {road_address}"
-                )
-                return True
+            if query_store == store_name:
+                if check_address(query_address, store_address) or check_road_address(
+                    query_address, road_address
+                ):
+                    print(
+                        f"가게 이름: {store_name}, 주소: {store_address} 도로명 주소: {road_address}"
+                    )
+                    return True
+                else:
+                    print("주소 안 맞음")
+                    print(
+                        f"주어진 주소: {query_address} \n\t주소: {store_address} \n\t도로명 주소: {road_address}"
+                    )
+                    return False
             else:
-                print(
-                    f"가게 이름: {store_name}, 주소: {store_address} 도로명 주소: {road_address}"
-                )
+                print("가게 이름 안 맞음")
+                print(f"주어진 가게 이름: {query_store} \n\t가게 이름: {store_name}")
                 return False
         else:
             return False
