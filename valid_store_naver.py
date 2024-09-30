@@ -22,7 +22,9 @@ def check_if_valid_store(query_store, query_address=""):
     # 결과 출력
     if response.status_code == 200:
         if not response.json()["items"]:
-            print("검색 결과가 없습니다.")
+            print(
+                f"검색 결과가 없습니다: \n\t가게명 {query_store} \n\t주소 {query_address}"
+            )
             return False
         for item in response.json()["items"]:
             store_name = item["title"].replace("<b>", "").replace("</b>", "")
