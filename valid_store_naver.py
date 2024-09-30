@@ -56,7 +56,7 @@ def check_if_valid_store(query_store, query_address=""):
                     query_address, road_address
                 ):
                     print(
-                        f"가게 이름: {store_name}, 주소: {store_address} 도로명 주소: {road_address}"
+                        f"가게 이름: {store_name}\n주소: {store_address}\n도로명 주소: {road_address}"
                     )
                     return True
                 else:
