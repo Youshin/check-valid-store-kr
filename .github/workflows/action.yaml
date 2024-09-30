@@ -30,15 +30,7 @@ jobs:
       - name: Extract store info from location.yaml
         id: store_info
         run: |
-          python -c "
-          import yaml
-          with open('location.yaml', 'r') as file:
-              data = yaml.safe_load(file)
-          for location in data['locations']:
-              for store_name, details in location.items():
-                  address = details['주소']
-                  print(f'{store_name},{address}')
-          " > store_info.txt
+          python extract_yaml.py > store_info.txt
 
       - name: Run store validation
         run: |
