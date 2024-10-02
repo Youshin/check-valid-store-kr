@@ -1,34 +1,49 @@
 name: "Naver Store Validator"
-on:
-  push:
-    paths:
-      - "location.yaml"
-  workflow_dispatch:
+description: "Validates store information using Naver API"
+inputs:
+  path:
+    description: "Path to the location.yaml file"
+    required: true
+    default: "location.yaml"
+  naver_client_id:
+    description: "Naver API Client ID"
+    required: true
+  naver_client_secret:
+    description: "Naver API Client Secret"
+    required: true
+outputs:
+  warnings:
+    description: "Number of warnings (invalid stores)"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10"
 
-jobs:
-  validate_store:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests python-dotenv pyyaml
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"
+    - name: Create .env file
+      shell: bash
+      run: |
+        echo "INPUT_PATH=${{ inputs.path }}" >> .env
+        echo "INPUT_NAVER_CLIENT_ID=${{ inputs.naver_client_id }}" >> .env
+        echo "INPUT_NAVER_CLIENT_SECRET=${{ inputs.naver_client_secret }}" >> .env
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests python-dotenv pyyaml
+    - name: Extract store info and validate
+      shell: bash
+      run: |
+        python extract_yaml.py | while IFS=',' read -r name address; do
+          python valid_store_naver.py "$name" "$address"
+        done > validation_results.txt
 
-      - name: Extract store info from location.yaml
-        id: store_info
-        run: |
-          python extract_yaml.py > store_info.txt
-
-      - name: Run store validation
-        run: |
-          while IFS=',' read -r name address; do
-            python valid_store_naver.py "$name" "$address"
-          done < store_info.txt
+    - name: Count warnings
+      shell: bash
+      run: |
+        warnings=$(grep -c "유효하지 않은 가게" validation_results.txt || true)
+        echo "warnings=$warnings" >> $GITHUB_OUTPUT
