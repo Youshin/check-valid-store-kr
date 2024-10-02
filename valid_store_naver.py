@@ -28,9 +28,11 @@ def check_road_address(query_address, store_address):
 
 def check_if_valid_store(query_store, query_address=""):
     # 네이버 API 키 설정
-    client_id = os.getenv("NAVER_CLIENT_ID")
-    client_secret = os.getenv("NAVER_CLIENT_SECRET")
-
+    client_id = os.getenv("INPUT_NAVER_CLIENT_ID")
+    client_secret = os.getenv("INPUT_NAVER_CLIENT_SECRET")
+    if not client_id or not client_secret:
+        print("네이버 API 키가 설정되어 있지 않습니다.")
+        sys.exit(1)
     query = f"{query_store} {query_address}"
     # 지역 검색 API URL
     url = f"https://openapi.naver.com/v1/search/local.json?query={query}&display=5"

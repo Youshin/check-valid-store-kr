@@ -22,3 +22,9 @@ locations:
 ```
 
 Github Action을 통해 자동으로 유효성 체크가 이루어진다.
+
+## 주의사항
+
+네이버 API 키를 발급받아야 한다.
+NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}"
+NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}

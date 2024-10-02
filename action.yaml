@@ -22,11 +22,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests python-dotenv pyyaml
 
-      - name: Create .env file
-        run: |
-          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
-          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
-
       - name: Extract store info from location.yaml
         id: store_info
         run: |
