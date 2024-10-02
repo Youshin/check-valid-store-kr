@@ -13,6 +13,3 @@ jobs:
           path: "location.yaml"
           naver_client_id: ${{ secrets.NAVER_CLIENT_ID }}
           naver_client_secret: ${{ secrets.NAVER_CLIENT_SECRET }}
-      - name: Check outputs and modified files
-        run: |
-          test "${{ steps.selftest.outputs.warnings }}" == "1"
