@@ -1,6 +1,9 @@
 import yaml
+import os
 
-with open("location.yaml", "r") as file:
+file_path = os.environ.get("INPUT_PATH", "location.yaml")
+
+with open(file_path, "r") as file:
     data = yaml.safe_load(file)
 for location in data["locations"]:
     for store_name, details in location.items():
