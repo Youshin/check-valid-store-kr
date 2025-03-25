@@ -1,5 +1,7 @@
 name: "Naver Store Validator"
 description: "Validates store information using Naver API"
+icon: "home"
+color: "green"
 inputs:
   path:
     description: "Path to the location.yaml file"
